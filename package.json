@@ -1,7 +1,7 @@
 {
   "name": "yutong-portfolio",
-  "version": "1.0.0",
-  "description": "Yutong's portfolio with AI chatbot",
+  "version": "1.0.1",
+  "description": "Yutong's portfolio with AI chatbot - zero config deployment",
   "type": "module",
   "dependencies": {
     "openai": "^4.20.0"
