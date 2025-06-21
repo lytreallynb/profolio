@@ -595,14 +595,17 @@
 </div>
 
 <footer>
-    &copy; 2025 Yutong Lyu. Built with Webstorm and AI assistance 🐈
+    &copy; 2025 Yutong Lyu. Built with GitHub Pages and AI assistance 🐈
 </footer>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
     AOS.init({ duration: 800, once: true });
 
-    // Chatbot functionality - 真正的API调用版本
+    // 配置：你的Vercel API地址
+    const API_BASE_URL = 'https://profolio-wine.vercel.app';
+
+    // Chatbot functionality - 使用外部API
     function toggleChat() {
         console.log('toggleChat called');
         const chatContainer = document.getElementById('chatContainer');
@@ -640,10 +643,10 @@
         sendButton.disabled = true;
 
         try {
-            console.log('Calling API with message:', message);
+            console.log('Calling external API with message:', message);
 
-            // 真正的API调用
-            const response = await fetch('/api/chat', {
+            // 调用Vercel部署的API
+            const response = await fetch(`${API_BASE_URL}/api/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -671,9 +674,9 @@
         } catch (error) {
             console.error('API Error:', error);
 
-            // 如果API失败，使用备用回复
+            // 如果外部API失败，使用备用回复
             const botResponse = generateFallbackResponse(message);
-            addMessage(`${botResponse}\n\n(Note: This is a fallback response as the AI service is temporarily unavailable)`, 'bot');
+            addMessage(`${botResponse}\n\n(Note: AI service temporarily unavailable, showing fallback response)`, 'bot');
         }
 
         typingIndicator.classList.remove('active');
@@ -727,6 +730,7 @@
     // 确保页面加载完成后聊天按钮可见
     document.addEventListener('DOMContentLoaded', function() {
         console.log('Page loaded, chatbot ready');
+        console.log('API Base URL:', API_BASE_URL);
         const chatToggle = document.querySelector('.chat-toggle');
         if (chatToggle) {
             console.log('Chat toggle button found');
