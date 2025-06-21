@@ -2,7 +2,8 @@
   "buildCommand": "echo 'Static build complete'",
   "outputDirectory": ".",
   "functions": {
-    "api/chat.js": {
+    "api/**/*.js": {
+      "runtime": "nodejs18.x",
       "maxDuration": 30
     }
   }
