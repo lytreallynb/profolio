@@ -1,0 +1,17 @@
+{
+  "name": "yutong-portfolio",
+  "version": "1.0.0",
+  "description": "Yutong's portfolio with AI chatbot",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build complete'",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "openai": "^4.20.0"
+  },
+  "keywords": ["portfolio", "ai", "chatbot"],
+  "author": "Yutong Lyu",
+  "license": "MIT"
+}

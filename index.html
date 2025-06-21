@@ -8,7 +8,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #5c6d70;
+            --primary: #6a898f;
             --accent: #a0b3b0;
             --highlight: #d7b9a3;
             --bg: #f3f1ee;
@@ -78,6 +78,9 @@
             padding: 1.5rem;
             box-shadow: 0 0 10px rgba(0,0,0,0.03);
             text-align: center;
+            position: sticky;
+            top: 88px;
+            height: fit-content;
         }
 
         .profile-image {
@@ -102,11 +105,53 @@
             color: var(--gray-dark);
         }
 
+        .profile-contact a, #contact a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .profile-contact a:hover, #contact a:hover {
+            color: var(--highlight);
+            text-decoration: underline;
+        }
+
+        .social-links {
+            margin-bottom: 1.5rem;
+        }
+
         .social-links a {
             margin: 0 0.5rem;
             text-decoration: none;
             font-size: 1.2rem;
             color: var(--accent);
+        }
+
+        .aside-gallery-container h3 {
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-family: 'Source Serif Pro', serif;
+        }
+
+        .aside-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .aside-gallery-item {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius);
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .aside-gallery-item:hover {
+            transform: scale(1.1);
         }
 
         main {
@@ -139,6 +184,27 @@
             margin-bottom: 0.75rem;
         }
 
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
         .tech-tags {
             margin-top: 1rem;
             display: flex;
@@ -154,6 +220,221 @@
             color: white;
         }
 
+        /* AI Chatbot Styles - 修复版本 */
+        .chat-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: 3px solid var(--white);
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(106, 137, 143, 0.4);
+            transition: all 0.3s ease;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        .chat-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(106, 137, 143, 0.6);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 8px 30px rgba(106, 137, 143, 0.4);
+            }
+            50% {
+                box-shadow: 0 8px 30px rgba(106, 137, 143, 0.7), 0 0 0 10px rgba(106, 137, 143, 0.1);
+            }
+            100% {
+                box-shadow: 0 8px 30px rgba(106, 137, 143, 0.4);
+            }
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            width: 420px;
+            height: 550px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            border: 2px solid var(--gray-light);
+            display: none;
+            flex-direction: column;
+            z-index: 9998;
+            overflow: hidden;
+        }
+
+        .chat-container.active {
+            display: flex;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--white);
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 3px solid var(--highlight);
+        }
+
+        .chat-header h3 {
+            font-family: 'Source Serif Pro', serif;
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .chat-header p {
+            margin: 0.3rem 0 0 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .chat-close {
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-close:hover {
+            opacity: 1;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background-color: var(--bg);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.bot {
+            margin-right: auto;
+        }
+
+        .message-content {
+            padding: 0.7rem 1rem;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--white);
+        }
+
+        .message.bot .message-content {
+            background: var(--white);
+            color: var(--primary);
+            border: 1px solid var(--gray-light);
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background: var(--white);
+            border-top: 1px solid var(--gray-light);
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.7rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 20px;
+            outline: none;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--accent);
+        }
+
+        .chat-input button {
+            padding: 0.7rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--white);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(106, 137, 143, 0.3);
+        }
+
+        .chat-input button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 0.5rem 1rem;
+            color: var(--gray-dark);
+            font-style: italic;
+            font-size: 0.8rem;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
         footer {
             text-align: center;
             padding: 1rem;
@@ -166,17 +447,36 @@
             .container {
                 flex-direction: column;
             }
+            aside {
+                position: static;
+            }
+
+            .chat-toggle {
+                width: 70px;
+                height: 70px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 28px;
+            }
+
+            .chat-container {
+                width: calc(100vw - 40px);
+                right: 20px;
+                left: 20px;
+                height: 500px;
+                bottom: 100px;
+            }
         }
     </style>
 </head>
 <body>
 <header data-aos="fade-down">
-    <h1>Yutong Lyu (fishhead)</h1>
+    <h1>Yutong Lyu</h1>
     <nav>
         <a href="#bio">Bio</a>
-        <a href="#news">News</a>
         <a href="#projects">Projects</a>
         <a href="#experience">Experience</a>
+        <a href="#gallery">Gallery</a>
         <a href="#contact">Contact</a>
     </nav>
 </header>
@@ -186,34 +486,63 @@
         <div class="profile-image"></div>
         <div class="profile-name">Yutong Lyu</div>
         <div class="profile-title">Undergraduate Student</div>
-        <div class="profile-affiliation">Data Science @ University of Michigan</div>
+        <div class="profile-affiliation">Data Science @ LSA</div>
+        <div class="profile-affiliation">University of Michigan</div>
         <div class="profile-contact">
             Ann Arbor, MI<br>
-            <a href="mailto:yutong@umich.edu">yutong@umich.edu</a>
+            Shenzhen, China<br>
+            <a href="mailto:yutonglvv@gmail.com">yutonglvv@gmail.com</a>
+            <a href="mailto:yutonglv@umich.edu">yutonglv@umich.edu</a>
         </div>
         <div class="social-links">
             <a href="https://github.com/lytreallynb">🔗</a>
-            <a href="#">💼</a>
+            <a href="#">📸</a>
             <a href="#">🎓</a>
-            <a href="#">📋</a>
+            <a href="#">🏸</a>
+        </div>
+
+        <div class="aside-gallery-container">
+            <h3>My Favorites</h3>
+            <div class="aside-gallery">
+                <img src="profile3.jpeg" alt="Favorite Photo 1" class="aside-gallery-item">
+                <img src="japan1.jpeg" alt="Favorite Photo 2" class="aside-gallery-item">
+                <img src="japan2.jpeg" alt="Favorite Photo 3" class="aside-gallery-item">
+                <img src="nepal1.jpeg" alt="Favorite Photo 4" class="aside-gallery-item">
+                <img src="uk1.jpeg" alt="Favorite Photo 5" class="aside-gallery-item">
+                <img src="shenzhen1.jpeg" alt="Favorite Photo 6" class="aside-gallery-item">
+            </div>
         </div>
     </aside>
 
     <main>
         <section id="bio" class="section" data-aos="fade-up">
             <h2>Short Bio</h2>
-            <p>I’m an undergraduate at the University of Michigan majoring in Data Science. I'm passionate about machine learning, natural language processing, and building efficient data-driven systems using C++, Python, and R.</p>
+            <p>I'm an undergraduate at the University of Michigan majoring in Data Science. I'm passionate about machine learning, natural language processing, and building efficient data-driven systems using C++, Python, and R.</p>
         </section>
 
         <section id="projects" class="section" data-aos="fade-up">
             <h2>Projects</h2>
             <p><strong>Labubu Art Generator</strong>: Designed an interactive web-based canvas where users can draw and generate random Labubu-inspired artworks with JavaScript and CSS filters.</p>
             <p><strong>Labubu Explorer Game</strong>: A mini 2D side-scrolling game prototype where players collect data points as Labubu travels through colorful landscapes. Built with HTML5 Canvas and vanilla JS.</p>
+            <p><strong>AI Portfolio Assistant</strong>: Integrated an intelligent chatbot into my personal website that can answer questions about my projects, experience, and background. Built with OpenAI API and modern web technologies.</p>
         </section>
 
         <section id="experience" class="section" data-aos="fade-up">
             <h2>Experience</h2>
-            <p><strong>Creative Developer Intern</strong>, Labubu Studio (Summer 2025): Built visual effects and micro-interactions for Labubu’s official website using GSAP and anime.js. Collaborated on animation pipelines and pixel-perfect layout design.</p>
+            <p><strong>Creative Developer Intern</strong>, Labubu Studio (Summer 2025): Built visual effects and micro-interactions for Labubu's official website using GSAP and anime.js. Collaborated on animation pipelines and pixel-perfect layout design.</p>
+        </section>
+
+        <section id="gallery" class="section" data-aos="fade-up">
+            <h2>Gallery</h2>
+            <p>A collection of my favorite photographs and moments.</p>
+            <div class="gallery-grid">
+                <img src="profile3.jpeg" alt="Gallery Photo 1" class="gallery-item">
+                <img src="japan1.jpeg" alt="Gallery Photo 2" class="gallery-item">
+                <img src="japan2.jpeg" alt="Gallery Photo 3" class="gallery-item">
+                <img src="nepal1.jpeg" alt="Gallery Photo 4" class="gallery-item">
+                <img src="uk1.jpeg" alt="Gallery Photo 5" class="gallery-item">
+                <img src="shenzhen1.jpeg" alt="Gallery Photo 6" class="gallery-item">
+            </div>
         </section>
 
         <section id="news" class="section" data-aos="fade-up">
@@ -221,22 +550,159 @@
             <ul>
                 <li>Jul 2025 – Contributed interactive sketch tool for Labubu fan site launch ✨</li>
                 <li>Jun 2025 – Released "Labubu Explorer" on GitHub and gained 300+ stars</li>
+                <li>Jun 2025 – Added AI assistant to personal portfolio website 🐈</li>
             </ul>
         </section>
 
         <section id="contact" class="section" data-aos="fade-up">
             <h2>Contact</h2>
-            <p>Email: <a href="mailto:yutong@umich.edu">yutong@umich.edu</a></p>
+            <p>Email: <a href="mailto:yutonglvv@gmail.com">yutonglvv@gmail.com</a></p>
+            <p>Email: <a href="mailto:yutonglv@umich.edu">yutonglv@umich.edu</a></p>
             <p>GitHub: <a href="https://github.com/lytreallynb">github.com/lytreallynb</a></p>
         </section>
     </main>
 </div>
 
+<!-- AI Chatbot -->
+<button class="chat-toggle" onclick="toggleChat()">
+    🐈
+    <div style="position: absolute; bottom: -8px; right: -8px; background: var(--highlight); color: white; border-radius: 50%; width: 24px; height: 24px; font-size: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold;">AI</div>
+</button>
+
+<div class="chat-container" id="chatContainer">
+    <div class="chat-header">
+        <h3>💬 Chat with Yutong's AI</h3>
+        <p>Ask me anything about Yutong!</p>
+        <button class="chat-close" onclick="toggleChat()">×</button>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        <div class="message bot">
+            <div class="message-content">
+                Hi! I'm Yutong's AI assistant. I can help answer questions about his projects, experience, and background. What would you like to know? 😊
+            </div>
+        </div>
+    </div>
+
+    <div class="typing-indicator" id="typingIndicator">
+        AI is thinking...
+    </div>
+
+    <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Ask me anything..." onkeypress="handleKeyPress(event)">
+        <button id="sendButton" onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
 <footer>
-    &copy; 2025 Yutong Lyu. Built with ❤️
+    &copy; 2025 Yutong Lyu. Built with Webstorm and AI assistance 🐈
 </footer>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({ duration: 800, once: true });</script>
+<script>
+    AOS.init({ duration: 800, once: true });
+
+    // Chatbot functionality - 修复版本
+    function toggleChat() {
+        console.log('toggleChat called'); // 调试用
+        const chatContainer = document.getElementById('chatContainer');
+        chatContainer.classList.toggle('active');
+
+        if (chatContainer.classList.contains('active')) {
+            document.getElementById('messageInput').focus();
+            console.log('Chat opened'); // 调试用
+        } else {
+            console.log('Chat closed'); // 调试用
+        }
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    async function sendMessage() {
+        const messageInput = document.getElementById('messageInput');
+        const message = messageInput.value.trim();
+
+        if (!message) return;
+
+        // Add user message
+        addMessage(message, 'user');
+        messageInput.value = '';
+
+        // Show typing indicator
+        const typingIndicator = document.getElementById('typingIndicator');
+        const sendButton = document.getElementById('sendButton');
+
+        typingIndicator.classList.add('active');
+        sendButton.disabled = true;
+
+        // 延迟2秒后显示回复，模拟API调用
+        setTimeout(() => {
+            const botResponse = generateFallbackResponse(message);
+            addMessage(botResponse, 'bot');
+
+            typingIndicator.classList.remove('active');
+            sendButton.disabled = false;
+        }, 2000);
+    }
+
+    function addMessage(text, sender) {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.textContent = text;
+
+        messageDiv.appendChild(contentDiv);
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function generateFallbackResponse(message) {
+        const lowerMessage = message.toLowerCase();
+
+        if (lowerMessage.includes('project') || lowerMessage.includes('labubu')) {
+            return "Yutong has worked on some cool projects! He created the Labubu Art Generator - an interactive web canvas for drawing Labubu-inspired art, and the Labubu Explorer Game - a 2D side-scrolling game built with HTML5 Canvas. He's really passionate about creative coding! 🎨";
+        }
+
+        if (lowerMessage.includes('experience') || lowerMessage.includes('work') || lowerMessage.includes('intern')) {
+            return "Yutong worked as a Creative Developer Intern at Labubu Studio in Summer 2025, where he built visual effects and micro-interactions using GSAP and anime.js. He's great at combining technical skills with creative design! 💼";
+        }
+
+        if (lowerMessage.includes('education') || lowerMessage.includes('school') || lowerMessage.includes('university')) {
+            return "Yutong is currently an undergraduate student at the University of Michigan, majoring in Data Science at LSA. He's passionate about machine learning and natural language processing! 🎓";
+        }
+
+        if (lowerMessage.includes('contact') || lowerMessage.includes('email') || lowerMessage.includes('reach')) {
+            return "You can reach Yutong at yutonglvv@gmail.com or yutonglv@umich.edu. You can also check out his GitHub at github.com/lytreallynb! 📧";
+        }
+
+        if (lowerMessage.includes('skill') || lowerMessage.includes('programming') || lowerMessage.includes('language')) {
+            return "Yutong is skilled in C++, Python, and R for building efficient data-driven systems. He also has experience with JavaScript, HTML5 Canvas, GSAP, and anime.js for creative web development! 💻";
+        }
+
+        if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('你好')) {
+            return "Hello! Nice to meet you! I'm here to help you learn more about Yutong. What would you like to know about him? 👋";
+        }
+
+        return "That's a great question! While I don't have specific information about that, I'd recommend reaching out to Yutong directly at yutonglvv@gmail.com. He'd be happy to chat with you! 😊";
+    }
+
+    // 确保页面加载完成后聊天按钮可见
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Page loaded, chatbot ready');
+        const chatToggle = document.querySelector('.chat-toggle');
+        if (chatToggle) {
+            console.log('Chat toggle button found');
+        } else {
+            console.log('Chat toggle button NOT found');
+        }
+    });
+</script>
 </body>
 </html>
