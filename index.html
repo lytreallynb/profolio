@@ -220,7 +220,7 @@
             color: white;
         }
 
-        /* AI Chatbot Styles - 修复版本 */
+        /* AI Chatbot Styles */
         .chat-toggle {
             position: fixed;
             bottom: 30px;
@@ -602,17 +602,17 @@
 <script>
     AOS.init({ duration: 800, once: true });
 
-    // Chatbot functionality - 修复版本
+    // Chatbot functionality - 真正的API调用版本
     function toggleChat() {
-        console.log('toggleChat called'); // 调试用
+        console.log('toggleChat called');
         const chatContainer = document.getElementById('chatContainer');
         chatContainer.classList.toggle('active');
 
         if (chatContainer.classList.contains('active')) {
             document.getElementById('messageInput').focus();
-            console.log('Chat opened'); // 调试用
+            console.log('Chat opened');
         } else {
-            console.log('Chat closed'); // 调试用
+            console.log('Chat closed');
         }
     }
 
@@ -639,14 +639,45 @@
         typingIndicator.classList.add('active');
         sendButton.disabled = true;
 
-        // 延迟2秒后显示回复，模拟API调用
-        setTimeout(() => {
-            const botResponse = generateFallbackResponse(message);
-            addMessage(botResponse, 'bot');
+        try {
+            console.log('Calling API with message:', message);
 
-            typingIndicator.classList.remove('active');
-            sendButton.disabled = false;
-        }, 2000);
+            // 真正的API调用
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    context: "You are Yutong Lyu's AI assistant. Yutong is an undergraduate Data Science student at University of Michigan. He's passionate about machine learning, NLP, and building data-driven systems. He has worked on projects like Labubu Art Generator and Labubu Explorer Game. He's also had experience as a Creative Developer Intern at Labubu Studio. Answer questions about his background, projects, and experience in a friendly and informative way."
+                })
+            });
+
+            console.log('API response status:', response.status);
+
+            if (!response.ok) {
+                throw new Error(`API responded with status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('API response data:', data);
+
+            if (data.success) {
+                addMessage(data.response, 'bot');
+            } else {
+                addMessage(data.error || "Sorry, I'm having trouble right now. Please try again later!", 'bot');
+            }
+        } catch (error) {
+            console.error('API Error:', error);
+
+            // 如果API失败，使用备用回复
+            const botResponse = generateFallbackResponse(message);
+            addMessage(`${botResponse}\n\n(Note: This is a fallback response as the AI service is temporarily unavailable)`, 'bot');
+        }
+
+        typingIndicator.classList.remove('active');
+        sendButton.disabled = false;
     }
 
     function addMessage(text, sender) {
