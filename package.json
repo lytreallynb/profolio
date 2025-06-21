@@ -2,14 +2,8 @@
   "name": "yutong-portfolio",
   "version": "1.0.0",
   "description": "Yutong's portfolio with AI chatbot",
-  "main": "index.js",
-  "scripts": {
-    "build": "echo 'Build complete'"
-  },
+  "type": "module",
   "dependencies": {
     "openai": "^4.20.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   }
 }
