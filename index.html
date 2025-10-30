@@ -150,6 +150,24 @@
             color: #4a1f1f;
         }
 
+        .christmas-toggle {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(229, 57, 53, 0.55);
+        }
+
+        .christmas-toggle__icon {
+            font-size: 1.2rem;
+        }
+
+        .christmas-toggle__label {
+            letter-spacing: 0.04em;
+        }
+
+        .christmas-toggle:hover {
+            background: rgba(233, 94, 92, 0.7);
+            color: #ffe8ec;
+        }
+
         .sr-only {
             position: absolute;
             width: 1px;
@@ -673,6 +691,101 @@
             color: #1b0f1a;
         }
 
+        body.christmas-mode {
+            --primary: #1f3e2c;
+            --accent: #d62839;
+            --highlight: #ffcf5d;
+            --bg-top: #f7fff1;
+            --bg-bottom: #ffe7e7;
+            --surface: rgba(255, 255, 255, 0.92);
+            --gray-light: #dcd3cf;
+            --gray-dark: #5f4339;
+            color: var(--primary);
+        }
+
+        body.christmas-mode header {
+            background: linear-gradient(120deg, #1f3e2c, #d62839);
+            box-shadow: 0 6px 24px rgba(214, 40, 57, 0.24);
+        }
+
+        body.christmas-mode footer {
+            background: linear-gradient(120deg, #1f3e2c, #d62839);
+        }
+
+        body.christmas-mode .mode-button {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(214, 40, 57, 0.4);
+        }
+
+        body.christmas-mode .project-card {
+            border-color: rgba(214, 40, 57, 0.18);
+            box-shadow: 0 18px 36px rgba(31, 62, 44, 0.2);
+        }
+
+        body.christmas-mode .project-tags span,
+        body.christmas-mode .blog-tags span {
+            background: rgba(214, 40, 57, 0.9);
+            color: #fff9ef;
+        }
+
+        .christmas-strip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 58px;
+            pointer-events: none;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: flex-start;
+            padding: 8px 0;
+            z-index: 60;
+        }
+
+        .christmas-bulb {
+            position: relative;
+            width: 14px;
+            height: 22px;
+            border-radius: 45% 45% 55% 55%;
+            background: #ffcf5d;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+            animation: twinkle var(--twinkle-duration) ease-in-out infinite;
+            transform-origin: top center;
+        }
+
+        .christmas-bulb::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: #736f6b;
+            border-radius: 2px;
+        }
+
+        .christmas-garland {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.2) 100%);
+            opacity: 0.5;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.35;
+                transform: scale(0.95) rotate(-2deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1) rotate(2deg);
+            }
+        }
+
         .halloween-layer {
             position: fixed;
             inset: 0;
@@ -981,7 +1094,8 @@
             }
 
             .theme-toggle__label,
-            .halloween-toggle__label {
+            .halloween-toggle__label,
+            .christmas-toggle__label {
                 display: none;
             }
 
@@ -1019,6 +1133,10 @@
             <button id="halloweenToggle" class="mode-button halloween-toggle" type="button" aria-label="Activate Halloween mode" aria-pressed="false">
                 <span class="halloween-toggle__icon" aria-hidden="true">🎃</span>
                 <span class="halloween-toggle__label">Halloween</span>
+            </button>
+            <button id="christmasToggle" class="mode-button christmas-toggle" type="button" aria-label="Activate Christmas mode" aria-pressed="false">
+                <span class="christmas-toggle__icon" aria-hidden="true">🎄</span>
+                <span class="christmas-toggle__label">Christmas</span>
             </button>
         </div>
     </div>
@@ -1384,10 +1502,14 @@
 
     const THEME_STORAGE_KEY = 'yutong-theme-preference';
     const HALLOWEEN_STORAGE_KEY = 'yutong-halloween-mode';
+    const CHRISTMAS_STORAGE_KEY = 'yutong-christmas-mode';
     const HALLOWEEN_LAYER_ID = 'halloween-spirit-layer';
+    const CHRISTMAS_LAYER_ID = 'christmas-led-strip';
     const HALLOWEEN_EMOJI = ['🎃', '👻'];
+    const CHRISTMAS_BULB_COLORS = ['#d62839', '#43a047', '#ffcf5d', '#f4ede4'];
     const themeToggleButton = document.getElementById('themeToggle');
     const halloweenToggleButton = document.getElementById('halloweenToggle');
+    const christmasToggleButton = document.getElementById('christmasToggle');
     const prefersDarkScheme = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
     const themeStorage = {
@@ -1422,6 +1544,24 @@
                 localStorage.setItem(HALLOWEEN_STORAGE_KEY, value);
             } catch (error) {
                 console.warn('Unable to persist Halloween preference:', error);
+            }
+        }
+    };
+
+    const christmasStorage = {
+        get() {
+            try {
+                return localStorage.getItem(CHRISTMAS_STORAGE_KEY);
+            } catch (error) {
+                console.warn('Christmas storage unavailable:', error);
+                return null;
+            }
+        },
+        set(value) {
+            try {
+                localStorage.setItem(CHRISTMAS_STORAGE_KEY, value);
+            } catch (error) {
+                console.warn('Unable to persist Christmas preference:', error);
             }
         }
     };
@@ -1494,7 +1634,54 @@
         document.body.appendChild(layer);
     }
 
-    function setHalloweenMode(isActive, { persist = true } = {}) {
+    function updateChristmasButton(isActive) {
+        if (!christmasToggleButton) return;
+        christmasToggleButton.setAttribute('aria-pressed', String(isActive));
+        christmasToggleButton.setAttribute('aria-label', isActive ? 'Deactivate Christmas mode' : 'Activate Christmas mode');
+
+        const iconSpan = christmasToggleButton.querySelector('.christmas-toggle__icon');
+        if (iconSpan) {
+            iconSpan.textContent = isActive ? '🎅' : '🎄';
+        }
+
+        const labelSpan = christmasToggleButton.querySelector('.christmas-toggle__label');
+        if (labelSpan) {
+            labelSpan.textContent = isActive ? 'Festive' : 'Christmas';
+        }
+    }
+
+    function removeChristmasStrip() {
+        const strip = document.getElementById(CHRISTMAS_LAYER_ID);
+        if (strip) {
+            strip.remove();
+        }
+    }
+
+    function spawnChristmasStrip() {
+        removeChristmasStrip();
+        const strip = document.createElement('div');
+        strip.className = 'christmas-strip';
+        strip.id = CHRISTMAS_LAYER_ID;
+
+        const garland = document.createElement('div');
+        garland.className = 'christmas-garland';
+        strip.appendChild(garland);
+
+        const bulbCount = 24;
+        for (let i = 0; i < bulbCount; i++) {
+            const bulb = document.createElement('span');
+            bulb.className = 'christmas-bulb';
+            const color = CHRISTMAS_BULB_COLORS[i % CHRISTMAS_BULB_COLORS.length];
+            bulb.style.background = color;
+            bulb.style.setProperty('--twinkle-duration', `${3 + Math.random() * 3}s`);
+            bulb.style.animationDelay = `${Math.random() * 2}s`;
+            strip.appendChild(bulb);
+        }
+
+        document.body.appendChild(strip);
+    }
+
+    function setHalloweenMode(isActive, { persist = true, skipSync = false } = {}) {
         document.body.classList.toggle('halloween-mode', isActive);
         updateHalloweenButton(isActive);
 
@@ -1504,8 +1691,30 @@
             removeHalloweenSprites();
         }
 
+        if (isActive && !skipSync) {
+            setChristmasMode(false, { persist: true, skipSync: true });
+        }
+
         if (persist) {
             halloweenStorage.set(isActive ? 'on' : 'off');
+        }
+    }
+
+    function setChristmasMode(isActive, { persist = true, skipSync = false } = {}) {
+        document.body.classList.toggle('christmas-mode', isActive);
+        updateChristmasButton(isActive);
+
+        if (isActive) {
+            spawnChristmasStrip();
+            if (!skipSync) {
+                setHalloweenMode(false, { persist: true, skipSync: true });
+            }
+        } else {
+            removeChristmasStrip();
+        }
+
+        if (persist) {
+            christmasStorage.set(isActive ? 'on' : 'off');
         }
     }
 
@@ -1533,6 +1742,20 @@
         halloweenToggleButton.addEventListener('click', () => {
             const isActive = !document.body.classList.contains('halloween-mode');
             setHalloweenMode(isActive);
+        });
+    }
+
+    const storedChristmas = christmasStorage.get();
+    if (storedChristmas === 'on') {
+        setChristmasMode(true, { persist: false });
+    } else {
+        updateChristmasButton(false);
+    }
+
+    if (christmasToggleButton) {
+        christmasToggleButton.addEventListener('click', () => {
+            const isActive = !document.body.classList.contains('christmas-mode');
+            setChristmasMode(isActive);
         });
     }
 
