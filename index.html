@@ -8,14 +8,16 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #6a898f;
-            --accent: #a0b3b0;
-            --highlight: #d7b9a3;
-            --bg: #f3f1ee;
+            --primary: #2b3158;
+            --accent: #ff8966;
+            --highlight: #ffa94d;
+            --bg-top: #fff6eb;
+            --bg-bottom: #ffe4f4;
+            --surface: rgba(255, 255, 255, 0.88);
             --white: #ffffff;
-            --gray-light: #dcdad5;
-            --gray-dark: #6b6b6b;
-            --radius: 12px;
+            --gray-light: #d7d0ce;
+            --gray-dark: #5a5250;
+            --radius: 14px;
         }
 
         * {
@@ -26,40 +28,138 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
+            background: linear-gradient(140deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
             color: var(--primary);
             line-height: 1.6;
             scroll-behavior: smooth;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        body.dark-theme {
+            --primary: #d7dcff;
+            --accent: #7f7bff;
+            --highlight: #ff7fbf;
+            --bg-top: #040616;
+            --bg-bottom: #1c1240;
+            --surface: rgba(15, 18, 40, 0.92);
+            --gray-light: #2f2b4a;
+            --gray-dark: #c6c9ff;
         }
 
         header {
             background: linear-gradient(120deg, var(--primary), var(--accent));
             color: var(--white);
-            padding: 1rem 2rem;
-            text-align: center;
+            padding: 1rem 1.5rem;
             position: sticky;
             top: 0;
             z-index: 10;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         header h1 {
             font-size: 2rem;
         }
 
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            gap: 1rem;
+        }
+
+        .mode-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         nav {
-            margin-top: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 0.25rem;
         }
 
         nav a {
             color: var(--white);
-            margin: 0 1rem;
+            margin: 0;
             text-decoration: none;
             font-weight: 600;
         }
 
         nav a:hover {
             text-decoration: underline;
+        }
+
+        .mode-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.18);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 999px;
+            padding: 0.35rem 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .mode-button:hover {
+            transform: translateY(-1px) scale(1.02);
+            background: rgba(255, 255, 255, 0.28);
+        }
+
+        .mode-button:focus-visible {
+            outline: 2px solid var(--highlight);
+            outline-offset: 2px;
+        }
+
+        .theme-toggle__icon {
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle__label {
+            letter-spacing: 0.04em;
+        }
+
+        .halloween-toggle {
+            background: rgba(255, 255, 255, 0.28);
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+
+        .halloween-toggle__icon {
+            font-size: 1.2rem;
+        }
+
+        .halloween-toggle__label {
+            letter-spacing: 0.04em;
+        }
+
+        .halloween-toggle:hover {
+            background: rgba(255, 218, 185, 0.6);
+            color: #4a1f1f;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         .container {
@@ -73,7 +173,7 @@
 
         aside {
             flex: 1;
-            background-color: var(--white);
+            background-color: var(--surface);
             border-radius: var(--radius);
             padding: 1.5rem;
             box-shadow: 0 0 10px rgba(0,0,0,0.03);
@@ -159,7 +259,7 @@
         }
 
         .section {
-            background: var(--white);
+            background: var(--surface);
             padding: 1.5rem;
             border-radius: var(--radius);
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
@@ -200,6 +300,34 @@
             cursor: pointer;
         }
 
+        .detail-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .detail-list li {
+            margin-bottom: 1rem;
+            color: var(--gray-dark);
+        }
+
+        .detail-note {
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .skills-grid h3 {
+            font-size: 1rem;
+            margin-bottom: 0.35rem;
+            color: var(--primary);
+            font-family: 'Source Serif Pro', serif;
+        }
+
         .gallery-item:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -218,6 +346,396 @@
             border-radius: 15px;
             font-size: 0.8rem;
             color: white;
+        }
+
+        .project-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.25rem;
+        }
+
+        .project-card {
+            position: relative;
+            padding: 1.2rem;
+            border-radius: var(--radius);
+            background: var(--surface);
+            border: 1px solid rgba(106, 137, 143, 0.15);
+            box-shadow: 0 12px 30px rgba(15, 22, 27, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 36px rgba(15, 22, 27, 0.16);
+        }
+
+        .project-media {
+            position: relative;
+            border-radius: var(--radius);
+            height: 160px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 20% 20%, rgba(215, 185, 163, 0.25), transparent 60%),
+                        linear-gradient(135deg, rgba(106, 137, 143, 0.25), rgba(160, 179, 176, 0.2));
+        }
+
+        .project-card[data-tone="compute"] .project-media {
+            background: radial-gradient(circle at 22% 18%, rgba(123, 186, 255, 0.35), transparent 65%),
+                        linear-gradient(140deg, rgba(62, 93, 191, 0.2), rgba(17, 63, 87, 0.25));
+        }
+
+        .project-card[data-tone="community"] .project-media {
+            background: radial-gradient(circle at 18% 20%, rgba(255, 180, 120, 0.35), transparent 70%),
+                        linear-gradient(140deg, rgba(241, 143, 86, 0.25), rgba(193, 86, 133, 0.25));
+        }
+
+        .project-card[data-tone="vision"] .project-media {
+            background: radial-gradient(circle at 75% 30%, rgba(103, 255, 210, 0.25), transparent 70%),
+                        linear-gradient(140deg, rgba(56, 136, 167, 0.25), rgba(22, 50, 76, 0.35));
+        }
+
+        .project-card[data-tone="design"] .project-media {
+            padding: 0;
+            background: transparent;
+        }
+
+        .project-card[data-tone="insight"] .project-media {
+            background: radial-gradient(circle at 30% 25%, rgba(255, 207, 145, 0.35), transparent 70%),
+                        linear-gradient(140deg, rgba(186, 140, 86, 0.25), rgba(87, 104, 126, 0.3));
+        }
+
+        .project-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .project-card:hover .project-media img {
+            transform: scale(1.05);
+        }
+
+        .project-icon {
+            font-size: 3rem;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));
+        }
+
+        .project-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.75);
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .project-card[data-tone="design"] .project-badge {
+            background: rgba(0,0,0,0.55);
+            color: var(--white);
+        }
+
+        .project-content h3 {
+            margin-bottom: 0.35rem;
+            font-family: 'Source Serif Pro', serif;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .project-content p {
+            color: var(--gray-dark);
+            font-size: 0.95rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.75rem;
+        }
+
+        .project-tags span {
+            background: rgba(215, 185, 163, 0.85);
+            color: var(--white);
+            border-radius: 999px;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.03em;
+        }
+
+        .project-actions {
+            margin-top: auto;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: var(--highlight);
+            border-color: var(--highlight);
+        }
+
+        .project-link span {
+            font-size: 1rem;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.25rem;
+        }
+
+        .blog-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.3rem;
+            box-shadow: 0 12px 32px rgba(43, 49, 88, 0.14);
+            border: 1px solid rgba(43, 49, 88, 0.12);
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .blog-card h3 {
+            font-family: 'Source Serif Pro', serif;
+            font-size: 1.15rem;
+            color: var(--primary);
+        }
+
+        .blog-card p {
+            color: var(--gray-dark);
+            font-size: 0.92rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: auto;
+        }
+
+        .blog-tags span {
+            background: rgba(255, 169, 77, 0.9);
+            color: #2b1f1c;
+            border-radius: 999px;
+            padding: 0.25rem 0.65rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+        }
+
+        .blog-read {
+            margin-top: 0.4rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        body.dark-theme .blog-card,
+        body.halloween-mode .blog-card {
+            box-shadow: 0 20px 36px rgba(10, 12, 28, 0.3);
+            border-color: rgba(127, 123, 255, 0.2);
+        }
+
+        body.dark-theme .blog-tags span,
+        body.halloween-mode .blog-tags span {
+            background: rgba(127, 123, 255, 0.82);
+            color: #f4ede4;
+        }
+
+        .hobby-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .hobby-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hobby-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+
+        .hobby-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.35rem;
+            color: var(--primary);
+            font-family: 'Source Serif Pro', serif;
+        }
+
+        .hobby-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .hobby-card p {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+            margin-bottom: 0;
+        }
+
+        body.dark-theme aside,
+        body.dark-theme .section,
+        body.dark-theme .hobby-card,
+        body.dark-theme .chat-container,
+        body.dark-theme .project-card {
+            box-shadow: 0 6px 20px rgba(4, 9, 13, 0.6);
+        }
+
+        body.dark-theme .project-card {
+            border-color: rgba(213, 228, 234, 0.18);
+        }
+
+        body.dark-theme .project-tags span {
+            background: rgba(243, 165, 116, 0.7);
+            color: #0f161b;
+        }
+
+        body.dark-theme .chat-messages,
+        body.halloween-mode .chat-messages {
+            background: rgba(15, 18, 40, 0.55);
+        }
+
+        body.halloween-mode {
+            --primary: #f4ede4;
+            --accent: #f57c00;
+            --highlight: #ffae38;
+            --bg-top: #1b0f1a;
+            --bg-bottom: #431b38;
+            --surface: #2a1728;
+            --gray-light: #432440;
+            --gray-dark: #f4ede4;
+            color: var(--primary);
+        }
+
+        body.halloween-mode header {
+            background: linear-gradient(120deg, #3c1a39, #f57c00);
+            box-shadow: 0 4px 20px rgba(245, 124, 0, 0.4);
+        }
+
+        body.halloween-mode footer {
+            background: linear-gradient(120deg, #3c1a39, #f57c00);
+        }
+
+        body.halloween-mode .mode-button {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 174, 56, 0.55);
+        }
+
+        body.halloween-mode .project-card {
+            border-color: rgba(255, 174, 56, 0.2);
+            box-shadow: 0 18px 40px rgba(245, 124, 0, 0.25);
+        }
+
+        body.halloween-mode .project-tags span {
+            background: rgba(255, 174, 56, 0.8);
+            color: #1b0f1a;
+        }
+
+        .halloween-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 50;
+        }
+
+        .spooky-sprite {
+            position: absolute;
+            font-size: clamp(1.8rem, 3vw, 3.2rem);
+            opacity: 0;
+            animation: floatSpooky var(--float-duration) linear infinite;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.4));
+        }
+
+        @keyframes floatSpooky {
+            0% {
+                transform: translateY(10vh) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-15vh) scale(1) rotate(6deg);
+            }
+            100% {
+                transform: translateY(-40vh) scale(0.9) rotate(-6deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .project-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .experience-entry {
+            margin-bottom: 1.5rem;
+        }
+
+        .experience-entry ul {
+            margin-left: 1.1rem;
+            color: var(--gray-dark);
+        }
+
+        .experience-entry li {
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-entry h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--primary);
+            font-family: 'Source Serif Pro', serif;
+        }
+
+        .experience-meta {
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 0.6rem;
         }
 
         /* AI Chatbot Styles */
@@ -266,7 +784,7 @@
             right: 30px;
             width: 420px;
             height: 550px;
-            background: var(--white);
+            background: var(--surface);
             border-radius: 20px;
             box-shadow: 0 15px 50px rgba(0,0,0,0.2);
             border: 2px solid var(--gray-light);
@@ -341,7 +859,7 @@
             flex: 1;
             padding: 1rem;
             overflow-y: auto;
-            background-color: var(--bg);
+            background: rgba(255, 255, 255, 0.4);
         }
 
         .message {
@@ -372,7 +890,7 @@
         }
 
         .message.bot .message-content {
-            background: var(--white);
+            background: var(--surface);
             color: var(--primary);
             border: 1px solid var(--gray-light);
         }
@@ -380,7 +898,7 @@
         .chat-input {
             display: flex;
             padding: 1rem;
-            background: var(--white);
+            background: var(--surface);
             border-top: 1px solid var(--gray-light);
             gap: 0.5rem;
         }
@@ -451,6 +969,26 @@
                 position: static;
             }
 
+            .header-top {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .mode-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .theme-toggle__label,
+            .halloween-toggle__label {
+                display: none;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
             .chat-toggle {
                 width: 70px;
                 height: 70px;
@@ -471,10 +1009,26 @@
 </head>
 <body>
 <header data-aos="fade-down">
-    <h1>Yutong Lyu</h1>
+    <div class="header-top">
+        <h1>Yutong Lyu</h1>
+        <div class="mode-controls">
+            <button id="themeToggle" class="mode-button theme-toggle" type="button" aria-label="Toggle color theme" aria-pressed="false">
+                <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+                <span class="theme-toggle__label">Theme</span>
+            </button>
+            <button id="halloweenToggle" class="mode-button halloween-toggle" type="button" aria-label="Activate Halloween mode" aria-pressed="false">
+                <span class="halloween-toggle__icon" aria-hidden="true">🎃</span>
+                <span class="halloween-toggle__label">Halloween</span>
+            </button>
+        </div>
+    </div>
     <nav>
         <a href="#bio">Bio</a>
+        <a href="#education">Education</a>
+        <a href="#skills">Skills</a>
+        <a href="#hobbies">Hobbies</a>
         <a href="#projects">Projects</a>
+        <a href="#blog">Blog</a>
         <a href="#experience">Experience</a>
         <a href="#gallery">Gallery</a>
         <a href="#contact">Contact</a>
@@ -485,20 +1039,19 @@
     <aside data-aos="fade-right">
         <div class="profile-image"></div>
         <div class="profile-name">Yutong Lyu</div>
-        <div class="profile-title">Data Science Student</div>
-        <div class="profile-affiliation">B.S. Data Science @ LSA</div>
-        <div class="profile-affiliation">University of Michigan</div>
+        <div class="profile-title">Data Science &amp; ML Engineer</div>
+        <div class="profile-affiliation">B.S. Data Science · University of Michigan (May 2026)</div>
         <div class="profile-contact">
             Ann Arbor, MI | Shenzhen, China<br>
-            Phone: (+86) 13510853995<br>
             <a href="mailto:yutonglvv@gmail.com">yutonglvv@gmail.com</a><br>
             <a href="mailto:yutonglv@umich.edu">yutonglv@umich.edu</a>
+            <br><a href="mailto:yutonglv@outlook.com">yutonglv@outlook.com</a>
         </div>
         <div class="social-links">
-            <a href="https://github.com/lytreallynb">🔗</a>
-            <a href="#">📸</a>
-            <a href="#">🎓</a>
-            <a href="#">🏸</a>
+            <a href="https://github.com/lytreallynb" target="_blank" rel="noopener" aria-label="GitHub">🔗</a>
+            <a href="https://lytreallynb.github.io" target="_blank" rel="noopener" aria-label="Portfolio site">🌐</a>
+            <a href="https://linkedin.com/in/yutong-lyu" target="_blank" rel="noopener" aria-label="LinkedIn">💼</a>
+            <a href="Yutong Lyu resume.pdf" target="_blank" rel="noopener" aria-label="Open resume">📄</a>
         </div>
 
         <div class="aside-gallery-container">
@@ -517,36 +1070,190 @@
     <main>
         <section id="bio" class="section" data-aos="fade-up">
             <h2>Short Bio</h2>
-            <p>I'm an undergraduate at the University of Michigan majoring in Data Science, expected to graduate in December 2026. I'm passionate about AI, machine learning, natural language processing, and software engineering. My interests include photography, music, badminton, fitness, and volunteering.</p>
+            <p>Hi, I'm Yutong—an inquisitive University of Michigan Data Science major (May 2026) who turns complex systems into approachable tools. Recently, I shipped optimization pipelines as a Software Engineering Intern at Shenzhen Taikejia Technology and prototyped playful generative-art experiences with cross-disciplinary design partners.</p>
+            <p>My sweet spot lives at the intersection of machine learning, optimization, and thoughtful UX. Whether I'm profiling a branch-and-bound solver, tuning a hybrid CNN–ViT model, or curating travel photo essays, I chase outcomes that are rigorous, kind, and creative.</p>
+        </section>
+
+        <section id="education" class="section" data-aos="fade-up">
+            <h2>Education</h2>
+            <ul class="detail-list">
+                <li>
+                    <strong>University of Michigan</strong> — B.S. Data Science (Expected May 2026)
+                    <br><span class="detail-note">Ann Arbor, MI</span>
+                </li>
+                <li>
+                    <strong>Guangdong University of Finance &amp; Economics</strong> — B.Econ. Finance Engineering
+                    <br><span class="detail-note">Guangzhou, China · Sep 2022 – Jun 2024</span>
+                </li>
+            </ul>
+        </section>
+
+        <section id="skills" class="section" data-aos="fade-up">
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div>
+                    <h3>Program Leadership</h3>
+                    <p>Research sprint coordination, cross-functional scheduling, requirements tracking, risk mitigation.</p>
+                </div>
+                <div>
+                    <h3>Languages</h3>
+                    <p>Python, C++, Java, JavaScript, R, SQL, LaTeX.</p>
+                </div>
+                <div>
+                    <h3>Data &amp; Systems</h3>
+                    <p>PyTorch, NumPy, Pandas, MATLAB, STATA, Git, Linux/Unix workflows.</p>
+                </div>
+                <div>
+                    <h3>Human Languages</h3>
+                    <p>English, Mandarin Chinese, Cantonese.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="hobbies" class="section" data-aos="fade-up">
+            <h2>Hobbies &amp; Interests</h2>
+            <div class="hobby-list">
+                <div class="hobby-card">
+                    <span class="hobby-icon" aria-hidden="true">📸</span>
+                    <h3>Photography</h3>
+                    <p>Exploring light, color, and quiet moments through street and travel photography.</p>
+                </div>
+                <div class="hobby-card">
+                    <span class="hobby-icon" aria-hidden="true">🎶</span>
+                    <h3>Music</h3>
+                    <p>Curating playlists and discovering indie artists that inspire new creative moods.</p>
+                </div>
+                <div class="hobby-card">
+                    <span class="hobby-icon" aria-hidden="true">🏸</span>
+                    <h3>Badminton</h3>
+                    <p>Staying active with fast-paced rallies and the teamwork that comes with doubles play.</p>
+                </div>
+                <div class="hobby-card">
+                    <span class="hobby-icon" aria-hidden="true">💪</span>
+                    <h3>Fitness</h3>
+                    <p>Balancing busy weeks with strength training and mindful movement.</p>
+                </div>
+                <div class="hobby-card">
+                    <span class="hobby-icon" aria-hidden="true">🤝</span>
+                    <h3>Volunteering</h3>
+                    <p>Giving back through community initiatives that support education and equity.</p>
+                </div>
+            </div>
         </section>
 
         <section id="projects" class="section" data-aos="fade-up">
             <h2>Projects</h2>
-            <p><strong>Puzzle Solver</strong> | C++, Algorithms: Built a robust command-line puzzle solver capable of processing complex maze-like maps with large state spaces. Implemented both depth-first search and breadth-first search algorithms with optimized traversal logic.</p>
+            <p>Each build starts as a playful sketch in my notebooks—then becomes a living system I can ship, measure, and iterate on. Here are a few capsules from that design-to-deployment arc.</p>
 
-            <p><strong>Star Wars: Episode X - A New Heap</strong> | C++, Data Structures: Designed and implemented three optimized priority queue variants (sorted array, binary heap, pairing heap) using C++ templates and polymorphic interfaces. Achieved significant performance improvements through algorithmic optimization.</p>
+            <div class="project-showcase">
+                <article class="project-card" data-tone="compute">
+                    <div class="project-media">
+                        <span class="project-badge">Optimization</span>
+                        <span class="project-icon" aria-hidden="true">🧮</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>MIPSolver</h3>
+                        <p>A cross-platform branch-and-bound solver with pybind11 bindings so analysts can prototype models in Python, then burst into C++ performance when it’s time to ship.</p>
+                        <div class="project-tags">
+                            <span>Branch &amp; Bound</span>
+                            <span>C++</span>
+                            <span>pybind11</span>
+                        </div>
+                    </div>
+                </article>
 
-            <p><strong>Bank Transaction Simulator</strong> | C++, Data Structures: Developed a high-throughput banking simulation system processing millions of concurrent transactions. Implemented custom hash table data structures for optimal performance and built comprehensive CLI parsing system.</p>
+                <article class="project-card" data-tone="community">
+                    <div class="project-media">
+                        <span class="project-badge">Community</span>
+                        <span class="project-icon" aria-hidden="true">💬</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Dynamic Social Platform</h3>
+                        <p>React + Flask experience with real-time feeds, infinite scroll, and async rendering—designed so stories stay on screen while data flows from modular REST endpoints on AWS.</p>
+                        <div class="project-tags">
+                            <span>React</span>
+                            <span>Flask</span>
+                            <span>AWS EC2</span>
+                        </div>
+                    </div>
+                </article>
 
-            <p><strong>Interactive Population Forecast Dashboard</strong> | R, Shiny, Data Visualization: Created a full-stack web application analyzing global population trends using UN demographic datasets. Implemented dynamic filtering, real-time statistical computations, and responsive data visualizations.
-                <a href="https://github.com/KatherynZheng/datasci306-final_project" target="_blank" style="color: var(--primary);">View Repository</a></p>
+                <article class="project-card" data-tone="vision">
+                    <div class="project-media">
+                        <span class="project-badge">Vision</span>
+                        <span class="project-icon" aria-hidden="true">🐾</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Dog Breed Classifier</h3>
+                        <p>Hybrid CNN + ViT pipeline trained on 8,867 labeled photos, reaching 93% validation accuracy with focal loss tuning, mixup augmentation, and model explainability overlays.</p>
+                        <div class="project-tags">
+                            <span>PyTorch</span>
+                            <span>ViT</span>
+                            <span>Model Explainability</span>
+                        </div>
+                    </div>
+                </article>
 
-            <div class="tech-tags">
-                <span class="tech-tag">C++</span>
-                <span class="tech-tag">Python</span>
-                <span class="tech-tag">R</span>
-                <span class="tech-tag">SQL</span>
-                <span class="tech-tag">Algorithms</span>
-                <span class="tech-tag">Data Structures</span>
-                <span class="tech-tag">Shiny</span>
-                <span class="tech-tag">Data Visualization</span>
+                <article class="project-card" data-tone="design">
+                    <div class="project-media">
+                        <span class="project-badge">Design Demo</span>
+                        <img src="design demo.png" alt="Moodboard from a generative art experience design demo" loading="lazy">
+                    </div>
+                    <div class="project-content">
+                        <h3>Generative Playground Moodboard</h3>
+                        <p>A visual demo board that captured motion studies, color stories, and UI beats for a generative art experience before translating the system to engineering specs.</p>
+                        <div class="project-tags">
+                            <span>Creative Direction</span>
+                            <span>Generative Art</span>
+                            <span>UX Motion</span>
+                        </div>
+                        <div class="project-actions">
+                            <a class="project-link" href="design demo.png" target="_blank" rel="noopener">View design board <span aria-hidden="true">→</span></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card" data-tone="insight">
+                    <div class="project-media">
+                        <span class="project-badge">Insight</span>
+                        <span class="project-icon" aria-hidden="true">🌐</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Population Forecast Dashboard</h3>
+                        <p>R Shiny environment for UN demographic planning with scenario toggles, quick-glance summaries, and narrative annotations for policy partners.</p>
+                        <div class="project-tags">
+                            <span>R Shiny</span>
+                            <span>Data Viz</span>
+                            <span>Scenario Modeling</span>
+                        </div>
+                        <div class="project-actions">
+                            <a class="project-link" href="https://github.com/KatherynZheng/datasci306-final_project" target="_blank" rel="noopener">Open repository <span aria-hidden="true">→</span></a>
+                        </div>
+                    </div>
+                </article>
             </div>
         </section>
 
         <section id="experience" class="section" data-aos="fade-up">
             <h2>Experience</h2>
+            <div class="experience-entry">
+                <h3>Software Engineering Intern · Shenzhen Taikejia Technology Co., Ltd.</h3>
+                <p class="experience-meta">Jul 2025 – Aug 2025 · Shenzhen, China</p>
+                <ul>
+                    <li>Maintained Python automation pipelines for daily optimization model runs, cutting a critical script’s runtime by 40% on benchmark datasets.</li>
+                    <li>Integrated Gurobi and COPT solver APIs with reporting utilities to visualize 15+ performance metrics, streamlining decision reviews.</li>
+                    <li>Triaged and resolved 30 cross-functional bug and feature requests to keep research deliverables on track.</li>
+                </ul>
+            </div>
 
-            <p><strong>Research Team Leader</strong>, Exploring Jiangdong's Tourism Potential for Poverty Alleviation Through Data-Driven Analysis (November 2023 - May 2024): Led a multidisciplinary research team conducting comprehensive data collection and statistical analysis. Designed and executed large-scale survey methodologies, processed and analyzed survey data using statistical software, and developed data-driven recommendations for sustainable development initiatives.</p>
+            <div class="experience-entry">
+                <h3>Research Team Leader · Jiangdong Tourism Data-Driven Poverty Study</h3>
+                <p class="experience-meta">Nov 2023 – May 2024 · Guangdong University of Finance &amp; Economics</p>
+                <ul>
+                    <li>Directed end-to-end survey design, field interviews, and statistical modeling to produce actionable tourism funding insights.</li>
+                    <li>Delivered geo-spatial dashboards and recommendations adopted by faculty partners and local stakeholders.</li>
+                </ul>
+            </div>
         </section>
 
         <section id="gallery" class="section" data-aos="fade-up">
@@ -565,18 +1272,73 @@
         <section id="news" class="section" data-aos="fade-up">
             <h2>News</h2>
             <ul>
-                <li>Dec 2026 – Expected graduation from University of Michigan with B.S. in Data Science 🎓</li>
-                <li>May 2024 – Completed research project on tourism potential for poverty alleviation in Jiangdong</li>
-                <li>Aug 2023 – Completed finance internship at Shenzhen Hengding Architectural Decoration Design Engineering Co.</li>
+                <li>Aug 2025 – Wrapped up Software Engineering Internship at Shenzhen Taikejia Technology Co. 🇨🇳</li>
+                <li>Jul 2025 – Released MIPSolver benchmarks and documentation for broader research use 📊</li>
+                <li>Fall 2025 – Presented dynamic social media app and dog breed classifier in Michigan data science showcase 🚀</li>
+                <li>Nov 2024 – Shared population forecast dashboard with policy partners for scenario planning 📈</li>
+                <li>May 2026 – Expected graduation from the University of Michigan with a B.S. in Data Science 🎓</li>
             </ul>
+        </section>
+
+        <section id="blog" class="section" data-aos="fade-up">
+            <h2>Blog &amp; Insights</h2>
+            <p>I log the playbook behind the site—strategy, design, and launch routines that help me stay intentional while shipping quickly.</p>
+
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="blog-meta">
+                        <span>Strategy</span>
+                        <span>5 min read</span>
+                    </div>
+                    <h3>Building a Purposeful Personal Site</h3>
+                    <p>How I prioritize the essential pages—homepage, about, portfolio, resume, and contact—before layering on extras like testimonials or services.</p>
+                    <div class="blog-tags">
+                        <span>Planning</span>
+                        <span>Prioritization</span>
+                    </div>
+                    <div class="blog-read">Read notes <span aria-hidden="true">→</span></div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-meta">
+                        <span>Design</span>
+                        <span>4 min read</span>
+                    </div>
+                    <h3>Gradient Systems &amp; UX Flow</h3>
+                    <p>Thoughts on pairing warm sunrise gradients with twilight palettes, structuring navigation, and keeping mobile-first layouts feeling immersive.</p>
+                    <div class="blog-tags">
+                        <span>Design</span>
+                        <span>Accessibility</span>
+                    </div>
+                    <div class="blog-read">Peek inside <span aria-hidden="true">→</span></div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-meta">
+                        <span>Launch</span>
+                        <span>6 min read</span>
+                    </div>
+                    <h3>Ship, Share, Iterate</h3>
+                    <p>A launch checklist that covers social integrations, SEO foundations, testing loops, and the habit of updating before things feel “perfect”.</p>
+                    <div class="blog-tags">
+                        <span>Launch</span>
+                        <span>SEO</span>
+                    </div>
+                    <div class="blog-read">See checklist <span aria-hidden="true">→</span></div>
+                </article>
+            </div>
         </section>
 
         <section id="contact" class="section" data-aos="fade-up">
             <h2>Contact</h2>
             <p>Email: <a href="mailto:yutonglvv@gmail.com">yutonglvv@gmail.com</a></p>
             <p>Email: <a href="mailto:yutonglv@umich.edu">yutonglv@umich.edu</a></p>
+            <p>Email: <a href="mailto:yutonglv@outlook.com">yutonglv@outlook.com</a></p>
             <p>GitHub: <a href="https://github.com/lytreallynb">https://github.com/lytreallynb</a></p>
-            <p>Languages: Mandarin Chinese, Cantonese, English (TOEFL: 111)</p>
+            <p>Portfolio: <a href="https://lytreallynb.github.io">https://lytreallynb.github.io</a></p>
+            <p>LinkedIn: <a href="https://www.linkedin.com/in/yutong-lyu">https://www.linkedin.com/in/yutong-lyu</a></p>
+            <p>CV: <a href="Yutong Lyu resume.pdf" target="_blank" rel="noopener">Download PDF</a></p>
+            <p>Languages: Mandarin Chinese, Cantonese, English</p>
         </section>
     </main>
 </div>
@@ -597,7 +1359,7 @@
     <div class="chat-messages" id="chatMessages">
         <div class="message bot">
             <div class="message-content">
-                Hi! I'm Yutong's AI assistant. I can help answer questions about his projects, experience, and background. What would you like to know? 😊
+                Hi! I'm Yutong's AI assistant. I can help answer questions about her projects, experience, and background. What would you like to know? 😊
             </div>
         </div>
     </div>
@@ -619,6 +1381,169 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
     AOS.init({ duration: 800, once: true });
+
+    const THEME_STORAGE_KEY = 'yutong-theme-preference';
+    const HALLOWEEN_STORAGE_KEY = 'yutong-halloween-mode';
+    const HALLOWEEN_LAYER_ID = 'halloween-spirit-layer';
+    const HALLOWEEN_EMOJI = ['🎃', '👻'];
+    const themeToggleButton = document.getElementById('themeToggle');
+    const halloweenToggleButton = document.getElementById('halloweenToggle');
+    const prefersDarkScheme = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+    const themeStorage = {
+        get() {
+            try {
+                return localStorage.getItem(THEME_STORAGE_KEY);
+            } catch (error) {
+                console.warn('Theme storage unavailable:', error);
+                return null;
+            }
+        },
+        set(value) {
+            try {
+                localStorage.setItem(THEME_STORAGE_KEY, value);
+            } catch (error) {
+                console.warn('Unable to persist theme preference:', error);
+            }
+        }
+    };
+
+    const halloweenStorage = {
+        get() {
+            try {
+                return localStorage.getItem(HALLOWEEN_STORAGE_KEY);
+            } catch (error) {
+                console.warn('Halloween storage unavailable:', error);
+                return null;
+            }
+        },
+        set(value) {
+            try {
+                localStorage.setItem(HALLOWEEN_STORAGE_KEY, value);
+            } catch (error) {
+                console.warn('Unable to persist Halloween preference:', error);
+            }
+        }
+    };
+
+    function updateThemeButton(theme) {
+        if (!themeToggleButton) return;
+        const isDark = theme === 'dark';
+        themeToggleButton.setAttribute('aria-pressed', String(isDark));
+        themeToggleButton.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+
+        const iconSpan = themeToggleButton.querySelector('.theme-toggle__icon');
+        if (iconSpan) {
+            iconSpan.textContent = isDark ? '☀️' : '🌙';
+        }
+
+        const labelSpan = themeToggleButton.querySelector('.theme-toggle__label');
+        if (labelSpan) {
+            labelSpan.textContent = isDark ? 'Dark' : 'Light';
+        }
+    }
+
+    function applyTheme(theme) {
+        const isDark = theme === 'dark';
+        document.body.classList.toggle('dark-theme', isDark);
+        updateThemeButton(theme);
+    }
+
+    function updateHalloweenButton(isActive) {
+        if (!halloweenToggleButton) return;
+        halloweenToggleButton.setAttribute('aria-pressed', String(isActive));
+        halloweenToggleButton.setAttribute('aria-label', isActive ? 'Deactivate Halloween mode' : 'Activate Halloween mode');
+
+        const iconSpan = halloweenToggleButton.querySelector('.halloween-toggle__icon');
+        if (iconSpan) {
+            iconSpan.textContent = isActive ? '👻' : '🎃';
+        }
+
+        const labelSpan = halloweenToggleButton.querySelector('.halloween-toggle__label');
+        if (labelSpan) {
+            labelSpan.textContent = isActive ? 'Spooky' : 'Halloween';
+        }
+    }
+
+    function removeHalloweenSprites() {
+        const layer = document.getElementById(HALLOWEEN_LAYER_ID);
+        if (layer) {
+            layer.remove();
+        }
+    }
+
+    function spawnHalloweenSprites() {
+        removeHalloweenSprites();
+        const layer = document.createElement('div');
+        layer.className = 'halloween-layer';
+        layer.id = HALLOWEEN_LAYER_ID;
+
+        const spriteCount = 14;
+        for (let i = 0; i < spriteCount; i++) {
+            const sprite = document.createElement('span');
+            sprite.className = 'spooky-sprite';
+            sprite.textContent = HALLOWEEN_EMOJI[Math.random() < 0.5 ? 0 : 1];
+            sprite.style.left = `${Math.random() * 100}%`;
+            sprite.style.bottom = `${-5 - Math.random() * 20}vh`;
+            sprite.style.setProperty('--float-duration', `${14 + Math.random() * 10}s`);
+            sprite.style.animationDelay = `${Math.random() * 8}s`;
+            sprite.style.opacity = '0';
+            layer.appendChild(sprite);
+        }
+
+        document.body.appendChild(layer);
+    }
+
+    function setHalloweenMode(isActive, { persist = true } = {}) {
+        document.body.classList.toggle('halloween-mode', isActive);
+        updateHalloweenButton(isActive);
+
+        if (isActive) {
+            spawnHalloweenSprites();
+        } else {
+            removeHalloweenSprites();
+        }
+
+        if (persist) {
+            halloweenStorage.set(isActive ? 'on' : 'off');
+        }
+    }
+
+    const storedTheme = themeStorage.get();
+    const initialTheme = storedTheme || (prefersDarkScheme && prefersDarkScheme.matches ? 'dark' : 'light');
+    applyTheme(initialTheme);
+
+    if (themeToggleButton) {
+        themeToggleButton.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-theme');
+            const nextTheme = isDark ? 'dark' : 'light';
+            updateThemeButton(nextTheme);
+            themeStorage.set(nextTheme);
+        });
+    }
+
+    const storedHalloween = halloweenStorage.get();
+    if (storedHalloween === 'on') {
+        setHalloweenMode(true, { persist: false });
+    } else {
+        updateHalloweenButton(false);
+    }
+
+    if (halloweenToggleButton) {
+        halloweenToggleButton.addEventListener('click', () => {
+            const isActive = !document.body.classList.contains('halloween-mode');
+            setHalloweenMode(isActive);
+        });
+    }
+
+    if (prefersDarkScheme && prefersDarkScheme.addEventListener) {
+        prefersDarkScheme.addEventListener('change', (event) => {
+            if (!themeStorage.get()) {
+                const systemTheme = event.matches ? 'dark' : 'light';
+                applyTheme(systemTheme);
+            }
+        });
+    }
 
     // 配置：你的Vercel API地址
     const API_BASE_URL = 'https://profolio-wine.vercel.app';
@@ -671,7 +1596,7 @@
                 },
                 body: JSON.stringify({
                     message: message,
-                    context: "You are Yutong Lyu's AI assistant. Yutong is an undergraduate Data Science student at University of Michigan, expected graduation Dec 2026). He previously studied Finance Engineering at Guangdong University of Finance & Economics in China. He's skilled in C++, Python, R, and SQL, with experience in algorithms, data structures, and data visualization. His notable projects include a Puzzle Solver, Star Wars Priority Queue system, Bank Transaction Simulator, and Interactive Population Forecast Dashboard. He has professional experience as a Finance Intern at Shenzhen Hengding Architectural Decoration Design Engineering Co. and led research on tourism potential for poverty alleviation. His interests include photography, music, badminton, fitness, and volunteering. He speaks Mandarin Chinese, Cantonese, and English (TOEFL: 111). Answer questions about his background, projects, and experience in a friendly and informative way."
+                    context: "You are Yutong Lyu's AI assistant. Yutong is a University of Michigan Data Science major graduating in May 2026 who blends optimization, machine learning, and creative storytelling. She recently completed a Software Engineering Internship at Shenzhen Taikejia Technology building solver automation pipelines, led the Jiangdong tourism poverty-alleviation research initiative, and experiments with generative art experiences alongside design collaborators. Her notable projects include MIPSolver (branch-and-bound solver with Python bindings), a dynamic social media web app (React + Flask), a hybrid CNN–ViT dog breed classifier, and an interactive population forecast dashboard. She thrives in cross-functional teams, enjoys photography, music, badminton, fitness, and volunteering, and speaks Mandarin Chinese, Cantonese, and English. Answer questions about her background, projects, and experience in a friendly, encouraging tone."
                 })
             });
 
@@ -718,35 +1643,35 @@
     function generateFallbackResponse(message) {
         const lowerMessage = message.toLowerCase();
 
-        if (lowerMessage.includes('project') || lowerMessage.includes('puzzle') || lowerMessage.includes('bank') || lowerMessage.includes('population')) {
-            return "Yutong has worked on several impressive technical projects! Her Puzzle Solver uses DFS and BFS algorithms for complex maze navigation, the Star Wars Priority Queue project implements three different heap variants in C++, the Bank Transaction Simulator handles millions of concurrent transactions with custom hash tables, and her Interactive Population Forecast Dashboard analyzes global demographic trends using R and Shiny. Check out this repository at github.com/KatherynZheng/datasci306-final_project! 🚀";
+        if (lowerMessage.includes('project') || lowerMessage.includes('mip') || lowerMessage.includes('solver') || lowerMessage.includes('app') || lowerMessage.includes('dashboard') || lowerMessage.includes('model')) {
+            return "Yutong is excited about data-driven builds! Recent highlights include the MIPSolver branch-and-bound toolkit, a dynamic React + Flask social platform, a hybrid CNN–ViT dog breed classifier, and an interactive population forecast dashboard. 🚀";
         }
 
         if (lowerMessage.includes('experience') || lowerMessage.includes('work') || lowerMessage.includes('intern') || lowerMessage.includes('research')) {
-            return "Yutong has solid professional experience! She worked as a Finance Intern at Shenzhen Hengding Architectural Decoration Design Engineering Co. where she automated financial data reconciliation using Excel VBA. She also led research on tourism potential for poverty alleviation in Jiangdong, conducting comprehensive data analysis and developing sustainable development recommendations. 💼";
+            return "Yutong recently completed a Software Engineering Internship at Shenzhen Taikejia Technology, building solver automation pipelines and analytics dashboards. She also led the Jiangdong tourism poverty-alleviation research initiative and prototypes generative art experiences with design collaborators. 💼";
         }
 
         if (lowerMessage.includes('education') || lowerMessage.includes('school') || lowerMessage.includes('university') || lowerMessage.includes('gpa')) {
-            return "Yutong is currently pursuing her B.S. in Data Science at the University of Michigan, expected to graduate in December 2026.  Her coursework includes algorithms, data structures, machine learning, statistics, and programming! 🎓";
+            return "Yutong is pursuing her B.S. in Data Science at the University of Michigan with an expected graduation of May 2026. Her coursework spans algorithms, data structures, machine learning, statistics, and creative coding electives. 🎓";
         }
 
         if (lowerMessage.includes('contact') || lowerMessage.includes('email') || lowerMessage.includes('phone') || lowerMessage.includes('reach')) {
-            return "You can reach Yutong at yutonglvv@gmail.com or yutonglv@umich.edu. You can also check out her GitHub at https://github.com/lytreallynb! 📧";
+            return "You can reach Yutong at yutonglvv@gmail.com, yutonglv@umich.edu, or yutonglv@outlook.com. You can also explore her work on GitHub at https://github.com/lytreallynb. 📧";
         }
 
         if (lowerMessage.includes('skill') || lowerMessage.includes('programming') || lowerMessage.includes('language') || lowerMessage.includes('technical')) {
-            return "Yutong is skilled in C++, Python, R, and SQL for building efficient data-driven systems. She also has experience with MATLAB, STATA, Git, and various data analysis tools. She's fluent in Mandarin Chinese, Cantonese, and English (TOEFL: 111)! 💻";
+            return "Yutong works fluently with Python, C++, Java, JavaScript, R, SQL, and LaTeX. She builds with PyTorch, NumPy, Pandas, MATLAB, STATA, Git, and Linux/Unix workflows, and collaborates in Mandarin, Cantonese, and English! 💻";
         }
 
         if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('你好')) {
-            return "Hello! Nice to meet you! I'm here to help you learn more about Yutong. What would you like to know about his projects, experience, or education? 👋";
+            return "Hello! Nice to meet you! I'm here to help you learn more about Yutong. What would you like to know about her projects, experience, or studies? 👋";
         }
 
-        if (lowerMessage.includes('hobby') || lowerMessage.includes('interest') || lowerMessage.includes('hobby')) {
-            return "Yutong has diverse interests! She enjoys photography, music, badminton, fitness, and volunteering. She's also passionate about machine learning and natural language processing. You can see some of her favorite photos in the gallery section! 📸";
+        if (lowerMessage.includes('hobby') || lowerMessage.includes('interest') || lowerMessage.includes('volunteer') || lowerMessage.includes('music') || lowerMessage.includes('photography') || lowerMessage.includes('badminton')) {
+            return "Yutong stays energized with photography, music, badminton, strength training, and volunteering. Her gallery section features some of her favorite captures from recent travels! 📸";
         }
 
-        return "That's a great question! While I don't have specific information about that, I'd recommend reaching out to Yutong directly at yutonglvv@gmail.com. She'd be happy to chat with you! 😊";
+        return "That's a great question! If you need more detail, feel free to reach out to Yutong directly at yutonglvv@gmail.com—she'd love to chat! 😊";
     }
 
     // 确保页面加载完成后聊天按钮可见
